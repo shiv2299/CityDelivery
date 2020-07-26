@@ -1,0 +1,22 @@
+<html>
+<head>
+  <title>Test</title>
+  <style>
+    body {
+      background-color: #f7f7f7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Delivery Receipt</h1>
+  <p>
+  <p><b>Sender's Name</b> {{ delivery.customer.user.first_name }}</p>
+  <p><b>Sender's Address</b> {{ delivery.customer.address }}</p>
+  <p><b>Receiver's Name</b> {{ delivery.receiver_name }}</p>
+  <p><b>Receiver's Address</b> {{ delivery.receiver_address }}</p>
+  <p><b>Package Details</b> {{ delivery.delivery_details }}</p>
+  <p><b>Package Weight</b> {{ delivery.delivery_weight }}</p>
+  <p><b>Total price</b> {{ delivery.delivery_price }}</p>
+  </p>
+</body>
+</html>

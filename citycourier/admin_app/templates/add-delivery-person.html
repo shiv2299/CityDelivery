@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add new delivery person</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/login.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static '/textboxes.css' %}" type="text/css">
+    <style>
+
+        form p{
+color:red;
+}
+    </style>
+</head>
+<body>
+<div class="login-body">
+<h1 class="login-header">Create Delivery Person</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    <p id="name-error"></p>
+    <input type="text" class="tb" name="name" id="name" placeholder="Name"><br>
+
+    <p id="contact-error"></p>
+    <input type="text" class="tb" name="contact" id="contact" placeholder="Phone Number"><br>
+
+    <p id="email-error"></p>
+    <input type="email" class="tb" name="email" id="email" placeholder="Email">
+
+    <p id="password-error"></p>
+    <input type="password" class="tb" name="password" id="password" placeholder="Create Password"><br>
+
+    <input type="file" class="tb" name="doc" id="doc" value="Verification Document"><br>
+
+            <input type="button" class="btn" onclick="validate()" value="Create Account">
+</form>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    function validate(){
+        document.getElementById("name-error").innerHTML=""
+        document.getElementById("contact-error").innerHTML=""
+        document.getElementById("email-error").innerHTML=""
+        document.getElementById("password-error").innerHTML=""
+        formdata = new FormData();
+        var file = $('#doc')[0].files[0];
+        var contact_re = /^\d{10}$/
+        var name = document.getElementById("name").value
+        var contact = document.getElementById("contact").value
+        var email = document.getElementById("email").value
+        var password = document.getElementById("password").value
+        var csrf = $("input[name$='csrfmiddlewaretoken']").val()
+        console.log(csrf)
+        var validated=false
+        if(name===""){
+            validated=false
+            document.getElementById("name-error").innerHTML="Please enter name"
+        }
+         else if(contact===""){
+            validated=false
+            document.getElementById("contact-error").innerHTML="Please enter contact"
+        }
+        else if(/^\d+$/.test(contact)==false){
+            validated=false
+            document.getElementById("contact-error").innerHTML="Please enter valid contact"
+        }
+        else if(contact.length!=10){
+            validated=false
+            document.getElementById("contact-error").innerHTML="Please enter valid contact"
+        }
+        else if(email===""){
+            validated=false
+            document.getElementById("email-error").innerHTML="Please enter email"
+        }
+        else if(password===""){
+            validated=false
+            document.getElementById("password-error").innerHTML="Please enter password"
+        }
+        else{
+            validated=true
+            document.getElementById("name-error").innerHTML=""
+            document.getElementById("contact-error").innerHTML=""
+            document.getElementById("email-error").innerHTML=""
+            document.getElementById("password-error").innerHTML=""
+        }
+        if(validated){
+            formdata.append("name",name);
+            formdata.append("contact",contact);
+            formdata.append("email",email);
+            formdata.append("password",password);
+            formdata.append("document",file);
+
+            $.ajax({
+            headers: {"X-CSRFToken": csrf},
+            type: 'POST',
+            url: '{% url 'add-delivery-person' %}',
+            data: formdata,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if(data["success"]==="1")
+                {
+                    swal("Hurray!", data['message'], "success").then((value)=>window.location="{% url 'home' %}")
+
+                }
+                else{
+                    swal("Oops!", data['message'], "error");
+                }
+
+               }
+
+        });
+
+
+
+        }
+    }
+</script>
+
+</body>
+</html>

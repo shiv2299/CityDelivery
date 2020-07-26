@@ -1,0 +1,34 @@
+.tb
+{
+    padding:10px;
+    min-width: 300px;
+    margin-bottom: 5px;
+    font-size: medium;
+}
+
+.btn{
+    padding:10px;
+    min-width: 300px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border: 0;
+    background-color:  deepskyblue;
+    color: white;
+    font-size: large;
+    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: 1.4px;
+    transition: letter-spacing .2s;
+    text-align: center;
+}
+.btn:hover
+{
+    letter-spacing: 3px;
+}
+.signup-link{
+color:deepskyblue;
+text-decoration:none;
+}
+#create-account{
+text-align: center;
+}

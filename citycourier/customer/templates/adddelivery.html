@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/textboxes.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static '/radio.css' %}" type="text/css">
+</head>
+<body>
+
+<form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    <table>
+
+        <tr>
+            <th>Package Details</th>
+            <td><textarea name="details" class="tb" id="details" cols="30" rows="10" placeholder="Describe your package"></textarea></td>
+        </tr>
+
+        <tr>
+            <th>Package photo</th>
+            <td><input type="file" name="photo"></td>
+        </tr>
+
+        <tr>
+            <th>Package Weight (g)</th>
+            <td><input type="number" class="tb"name="weight" id="weight" step="0.1"></td>
+        </tr>
+
+        <tr>
+            <th>Receiver Name</th>
+            <td><input type="text"class="tb" name="name" id="name"></td>
+        </tr>
+
+        <tr>
+            <th>Receiver Address</th>
+            <td><textarea name="address"class="tb" id="address" cols="30" rows="10"></textarea></td>
+        </tr>
+
+        <tr>
+            <th>Receiver pincode</th>
+            <td><input type="number"class="tb" name="pincode" id="pincode"></td>
+        </tr>
+
+        <tr>
+            <th>Receiver contact</th>
+            <td><input type="number"class="tb" name="contact" id="contact"></td>
+        </tr>
+
+        <tr>
+            <th>Delivery Type</th>
+           <td> <div id="choice">
+            <label class="container">Normal
+                <input type="radio" name="delivery-type" value="Normal" checked>
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Fast
+                <input type="radio" name="delivery-type" value="Fast">
+                <span class="checkmark"></span>
+            </label>
+        </div></td>
+        </tr>
+
+
+    </table>
+        <button type="submit">Request Pickup</button>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>City Delivery Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/login.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static '/textboxes.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static '/radio.css' %}" type="text/css">
+    <style>
+
+
+form p{
+color:red;
+}
+
+
+#forgot-pass{
+text-align: right;
+padding-bottom:25px;
+}
+
+    </style>
+    <title>Login</title>
+</head>
+<body>
+
+
+<div class="login-body">
+    <h1 class="login-header">Login</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <h3 id="text">You are</h3><br>
+        <div id="choice">
+            <label class="container">Admin
+                <input type="radio" name="user-type" value="SA">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Customer
+                <input type="radio" name="user-type" value="CA" checked>
+                <span class="checkmark"></span>
+            </label>
+            <label class="container">Deliverer
+                <input type="radio" name="user-type" value="DP">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+        <p id="email-error"></p>
+        <input type="email" class="tb" name="email" id="email" placeholder="Email"><br>
+        <p id="password-error"></p>
+        <input type="password" class="tb" name="password" id="password" placeholder="Password"><br>
+        <input type="button" class="btn" onclick="validate()" value="Login">
+        </form>
+        <p id="forgot-pass">
+            <a href="{% url 'reset_password' %}" class="signup-link">Forgot Password</a>
+        </p>
+        <p id="create-account">
+            Don't have account? <a href="{% url 'signup' %}" class="signup-link">Create one</a>
+        </p>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+    function validate(){
+        document.getElementById("email-error").innerHTML=""
+        document.getElementById("password-error").innerHTML=""
+        var user_type = document.querySelector('input[name="user-type"]:checked').value;
+        var email = document.getElementById("email").value
+        var password = document.getElementById("password").value
+        var csrf = $("input[name$='csrfmiddlewaretoken']").val()
+        var validated=false
+        if(email===""){
+            validated=false
+            document.getElementById("email-error").innerHTML="Please enter email"
+        }
+        else if(password===""){
+            validated=false
+            document.getElementById("password-error").innerHTML="Please enter password"
+        }
+        else{
+            validated=true
+            document.getElementById("email-error").innerHTML=""
+            document.getElementById("password-error").innerHTML=""
+        }
+        if(validated){
+            $.ajax({
+            type: 'POST',
+            url: '{% url 'login' %}',
+            data: {
+                'csrfmiddlewaretoken': csrf,
+                'user_type':user_type,
+                "email":email,
+                "password":password
+            },
+            success: function (data) {
+            if(data["status"]){
+                    window.location="{% url 'home' %}"
+
+            }
+            else{
+            console.log("error")
+                swal("Oops!", data['message'], "error");
+            }
+
+            }
+
+        });
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <td>Order Details</td>
+        <td>Order weight</td>
+        <td>Order price</td>
+        <td>Order ststus</td>
+    </tr>
+    {% for i in data %}
+        <tr>
+            <td>{{ i.delivery_details }}</td>
+            <td>{{ i.delivery_weight }}</td>
+            <td>{{ i.delivery_price }}</td>
+            <td>{{ i.current_status }}</td>
+            {% if i.current_status == "Delivered" %}
+                <td><a href="{% url 'html_to_pdf' i.id %}">Download Receipt</a></td>
+                <td><a href="{% url 'feedback' i.id %}">Rate</a></td>
+            {% elif i.current_status == "Waiting" %}
+                <td><a href="{% url 'cancel-delivery' i.id %}">Cancel</a></td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>

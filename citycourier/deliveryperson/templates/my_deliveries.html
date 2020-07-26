@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<table border="1">
+    <tr>
+         <th>Details</th>
+            <th>Weight</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Sender Name</th>
+            <th>Receiver Name</th>
+            <th>Receiver Address</th>
+            <th>Receiver Pincode</th>
+            <th colspan="2">Action</th>
+
+    </tr>
+    {% for i in deliveries %}
+            <tr>
+                <td>{{ i.delivery_details }}</td>
+                <td>{{ i.delivery_weight }}</td>
+                <td>{{ i.delivery_price }}</td>
+                <td>{{ i.delivery_type }}</td>
+                <td>{{ i.customer.user.first_name }}</td>
+                <td>{{ i.receiver_name }}</td>
+                <td>{{ i.receiver_address }}</td>
+                <form action="" method="POST">
+                        {% csrf_token %}
+                <td>{{ i.receiver_pin_code }}
+                <input type="hidden" value="{{i.id}}" name="order_id">
+                </td>
+
+                {% if i.current_status == "Picked" %}
+                <td colspan="2">Order Picked Up</td>
+                {% elif i.current_status == "Cancelled" %}
+                <td colspan="2">Order Cancelled</td>
+                {% elif i.current_status == "Delivered" %}
+                <td colspan="2">Order Delivered</td>
+                {% else %}
+                    <td><input type="submit" id="accept-btn" name="action" value="Pick Up"></td>
+                    <td><input type="submit" id="reject-btn" name="action" value="Cancel"></td>
+                {% endif %}
+                {% if i.current_status == "Picked" %}
+                <td colspan="2"><input type="submit" id="deliver-btn" name="action" value="Complete Delivery"></td>
+                {% endif %}
+                    </form>
+    {% endfor %}
+</table>
+
+
+</body>
+</html>

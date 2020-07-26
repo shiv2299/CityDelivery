@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pending Deliveries</title>
+    <style>
+        td,th{
+            padding: 10px;
+        }
+        table{
+            border-collapse:collapse;
+        }
+        #accept-btn{
+            background-color:lightgreen;
+        }
+        #reject-btn{
+            background-color:red;
+        }
+        #accept-btn,#reject-btn{
+            border:none;
+            padding: 5px;
+        }
+        #accept-btn,#reject-btn:hover{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <table border="1">
+        <tr>
+            <th>Details</th>
+            <th>Weight</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Sender Name</th>
+            <th>Receiver Name</th>
+            <th>Receiver Address</th>
+            <th>Receiver Pincode</th>
+            <th>Assign Delivery Person</th>
+            <th colspan="2">Action</th>
+
+        </tr>
+        {% for i in deliveries %}
+            <tr>
+                <td>{{ i.delivery_details }}</td>
+                <td>{{ i.delivery_weight }} kg</td>
+                <td>{{ i.delivery_price }}</td>
+                <td>{{ i.delivery_type }}</td>
+                <td>{{ i.customer.user.first_name }}</td>
+                <td>{{ i.receiver_name }}</td>
+                <td>{{ i.receiver_address }}</td>
+                <td>{{ i.receiver_pin_code }}</td>
+                <form action="" method="post">
+                    {% csrf_token %}
+                <td>
+                    {% if i.current_status == "Accepted" or i.current_status == "Picked" %}
+                        {{ i.delivery_person.user.username }}
+                    {% elif i.current_status == "Cancelled" or i.current_status == "Delivered" %}
+                        -
+                    {% else %}
+                    <select name="delivery_person" id="delivery_person" onchange="get_delivery_person()">
+                        {% for j in delivery_persons %}
+                        <option value="{{j.id}}">{{ j.user }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+<!--                    <input type="hidden" id="delivery_person_id" name="delivery_person_id" value>-->
+                    <input type="hidden" value="{{i.id}}" name="order_id">
+
+                </td>
+                    {% if i.current_status == "Waiting" %}
+                        <td><input type="submit" id="accept-btn" name="action" value="Accept"></td>
+                        <td><input type="submit" id="reject-btn" name="action" value="Reject"></td>
+                    {% elif i.current_status == "Accepted" %}
+                        <td colspan="2">Order is Accepted</td>
+                    {% elif i.current_status == "Picked" %}
+                        <td colspan="2">Order is Picked Up</td>
+                    {% elif i.current_status == "Cancelled" %}
+                        <td colspan="2">Order is Cancelled</td>
+                    {% elif i.current_status == "Delivered" %}
+                        <td colspan="2">Order is Delivered</td>
+                    {% endif %}
+
+                </form>
+            </tr>
+        {% endfor %}
+    </table>
+    <script>
+        function get_delivery_person(){
+            var delivery_person_id = document.getElementById("delivery_person").value
+            console.log(delivery_person_id)
+            document.getElementById("delivery_person_id").innerHTML=delivery_person_id
+
+        }
+    </script>
+
+</body>
+</html>

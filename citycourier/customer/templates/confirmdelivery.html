@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Order</title>
+</head>
+<body>
+<form action="" method="POST">
+
+    {% csrf_token %}
+    <h1>Order Details</h1>
+    <p>item {{ data.delivery_details }}</p>
+    <p>weight {{ data.delivery_weight }} g</p>
+    <p>price per kg 50</p>
+    <p>amount {{ amount }}</p>
+    <p>gst {{ gst }}</p>
+    <p>Total Price {{ total }}</p>
+    <input type="hidden" name="id" value={{ data.id }}>
+    <input type="submit">
+</form>
+
+</body>
+</html>

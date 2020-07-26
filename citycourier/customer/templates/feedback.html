@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback</title>
+
+</head>
+<body>
+<h1>Please Rate your expirience</h1>
+<form action="" method="post">
+    {% csrf_token %}
+<input type="number" name="rating"><br>
+<textarea name="review" id="review" cols="30" rows="10"></textarea><br>
+    <input type="submit">
+</form>
+<div id="app" />
+</body>
+</html>

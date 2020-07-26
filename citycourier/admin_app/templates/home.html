@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>City Delivery</title>
+    <style>
+
+        li{
+            padding: 10px;
+            float: left;
+        }
+        ul {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <nav>
+        <ul>
+            <li><a href="">City Delivery</a></li>
+        </ul>
+        <ul style="float:right">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'signup' %}">Signup</a></li>
+            {% endif %}
+            {% if current_user.role == "CA" %}
+            <li><a href="{% url 'adddelivery' %}">New Order</a></li>
+            <li><a href="{% url 'history' %}">Your Orders</a></li>
+            {% elif current_user.role == "SA" %}
+            <li><a href="{% url 'orderaction' %}">View Orders</a></li>
+            <li><a href="{% url 'add-admin' %}">Add new admin</a></li>
+            <li><a href="{% url 'add-delivery-person' %}">Add new Delivery Person</a></li>
+            {% elif current_user.role == "DP" %}
+            <li><a href="{% url 'mydeliveries' %}">View Orders</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>

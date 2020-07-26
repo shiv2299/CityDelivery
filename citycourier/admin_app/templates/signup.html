@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/login.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static '/textboxes.css' %}" type="text/css">
+    <style>
+
+        form p{
+color:red;
+}
+    </style>
+</head>
+<body>
+<div class="login-body">
+<h1 class="login-header">Create Account</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    <p id="name-error"></p>
+    <input type="text" class="tb" name="name" id="name" placeholder="Name"><br>
+
+    <p id="contact-error"></p>
+    <input type="text" class="tb" name="contact" id="contact" placeholder="Phone Number"><br>
+
+    <p id="email-error"></p>
+    <input type="email" class="tb" name="email" id="email" placeholder="Email">
+
+    <p id="password-error"></p>
+    <input type="password" class="tb" name="password" id="password" placeholder="Create Password"><br>
+
+    <p id="address-error"></p>
+    <textarea id="address" class="tb" name="address" rows="3" cols="15" placeholder="Address"></textarea><br>
+
+    <p id="pincode-error"></p>
+    <input type="number" class="tb" name="pincode" id="pincode" placeholder="Pincode"><br>
+
+            <input type="button" class="btn" onclick="validate()" value="Create Account">
+</form>
+    <p id="create-account">
+            Already have account? <a href="{% url 'login' %}" class="signup-link">login</a>
+        </p>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    function validate(){
+        document.getElementById("name-error").innerHTML=""
+        document.getElementById("contact-error").innerHTML=""
+        document.getElementById("email-error").innerHTML=""
+        document.getElementById("password-error").innerHTML=""
+        document.getElementById("address-error").innerHTML=""
+        document.getElementById("pincode-error").innerHTML=""
+        var contact_re = /^\d{10}$/
+        var name = document.getElementById("name").value
+        var contact = document.getElementById("contact").value
+        var email = document.getElementById("email").value
+        var password = document.getElementById("password").value
+        var address = document.getElementById("address").value
+        var pincode = document.getElementById("pincode").value
+        var csrf = $("input[name$='csrfmiddlewaretoken']").val()
+        console.log(csrf)
+        var validated=false
+        if(name===""){
+            validated=false
+            document.getElementById("name-error").innerHTML="Please enter name"
+        }
+         else if(contact===""){
+            validated=false
+            document.getElementById("contact-error").innerHTML="Please enter contact"
+        }
+        else if(/^\d+$/.test(contact)==false){
+            validated=false
+            document.getElementById("contact-error").innerHTML="Please enter valid contact"
+        }
+        else if(contact.length!=10){
+            validated=false
+            document.getElementById("contact-error").innerHTML="Please enter valid contact"
+        }
+        else if(email===""){
+            validated=false
+            document.getElementById("email-error").innerHTML="Please enter email"
+        }
+        else if(password===""){
+            validated=false
+            document.getElementById("password-error").innerHTML="Please enter password"
+        }
+        else if(address===""){
+            validated=false
+            document.getElementById("address-error").innerHTML="Please enter address"
+        }
+        else if(pincode===""){
+            validated=false
+            document.getElementById("pincode-error").innerHTML="Please enter pincode"
+        }
+        else{
+            validated=true
+            document.getElementById("name-error").innerHTML=""
+            document.getElementById("contact-error").innerHTML=""
+            document.getElementById("email-error").innerHTML=""
+            document.getElementById("password-error").innerHTML=""
+            document.getElementById("address-error").innerHTML=""
+            document.getElementById("pincode-error").innerHTML=""
+        }
+        if(validated){
+            $.ajax({
+            type: 'POST',
+            url: '{% url 'signup' %}',
+            data: {
+                'csrfmiddlewaretoken': csrf,
+                "name":name,
+                "contact":contact,
+                "email":email,
+                "password":password,
+                "address":address,
+                "pincode":pincode
+            },
+            success: function (data) {
+            console.log(data["message"])
+                if(data["success"]==="1")
+                {
+                    swal("Hurray!", data['message'], "success").then((value)=>window.location="{% url 'login' %}")
+                }
+                else{
+                swal("Oops!", data['message'], "error");
+                }
+               }
+
+        });
+        }
+    }
+</script>
+
+</body>
+</html>
